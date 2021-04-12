@@ -38,6 +38,8 @@ export class CryptoDialog extends LitElement {
   shownCoins: Coin[];
   coinValue: number;
 
+  _coin: Coin;
+
   @query('#jp-c-qr')
   _qrEl: HTMLDivElement;
 
@@ -93,6 +95,7 @@ export class CryptoDialog extends LitElement {
 
   async selectCoin(coin: string) {
     this.selectedCoin = coin;
+    this._coin = AVAILABLE_COINS.find(it => it.id === coin);
 
     if (this.selectedCoin) {
 
@@ -109,18 +112,18 @@ export class CryptoDialog extends LitElement {
     const qrCode = new window.QRCodeStyling({
       width: 300,
       height: 300,
-      data: "https://www.facebook.com/",
-      image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+      data: this._coin.qr(this.wallet, this.message, this.coinValue),
+      image: this._coin.icon,
+      imageOptions: {
+        margin: 10
+      },
+      margin: 10,
       dotsOptions: {
-        color: "#4267b2",
-        type: "rounded"
+        color: this._coin.color,
+        type: 'rounded'
       },
       backgroundOptions: {
-        color: "#e9ebee",
-      },
-      imageOptions: {
-        crossOrigin: "anonymous",
-        margin: 20
+        color: '#e9ebee',
       }
     });
 
