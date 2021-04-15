@@ -9,10 +9,10 @@ export const AVAILABLE_COINS: Coin[] = [
     color: '#F7931A'
   },
   {
-    label: 'Etherium',
+    label: 'Ethereum',
     icon: '/dev/etherium.svg',
     id: 'ETH',
-    qr: (wallet, note, amount) => `ethereum:${wallet}?amount=${amount}&value=${amount}&data=${note}`,
+    qr: (wallet, note, amount) => `ethereum:${wallet}?value=${amount}&amount=ETH&data=${note}`,
     color: '#6b71d6'
   }
 ];
