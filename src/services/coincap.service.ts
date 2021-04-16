@@ -14,6 +14,6 @@ export class CoincapService extends CryptoService {
     );
     res = await res.json();
 
-    return res.data.priceUsd * value;
+    return value / res.data.priceUsd;
   }
 }

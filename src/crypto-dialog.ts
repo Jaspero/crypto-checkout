@@ -33,14 +33,16 @@ export class CryptoDialog extends LitElement {
   @property() message = ''
   @property() coins = '';
   @property() waitForConfirmation = false;
-  @property({converter: (k) => parseInt(k, 10)}) value: number;
   @property() selectedCoin: string;
   @property() hasTime = true;
   @property() loading = false;
   @property() paid = false;
 
+  @property({converter: (k) => parseInt(k, 10)}) value: number;
+  @property() coinValue: number;
+  @property() displayedCoinValue: string;
+
   shownCoins: Coin[];
-  coinValue: number;
 
   _coin: Coin;
 
@@ -75,17 +77,17 @@ export class CryptoDialog extends LitElement {
           <crypto-timer time="15:00" @finished="${this.timeOut}"></crypto-timer>
           <div id="jp-c-qr"></div>
           <div>
-            <div>${this.coinValue}</div>
+            <div>${this.displayedCoinValue}</div>
             <input readonly value="${this.wallet}" />
             <button @click="${() => this.selectCoin('')}">Back</button>
             <button @click="${() => this.confirmPay()}">Confirm Payment</button>
           </div>
         ` :
         html`<div class="time-out">
-            <p>Timeout elapsed for this order.</p>
-            <button @click="${() => this.selectCoin(this.selectedCoin)}">Update Rate</button>
-            <button @click="${() => this.selectCoin('')}">Select Different Coin</button>
-          </div>`
+          <p>Timeout elapsed for this order.</p>
+          <button @click="${() => this.selectCoin(this.selectedCoin)}">Update Rate</button>
+          <button @click="${() => this.selectCoin('')}">Select Different Coin</button>
+        </div>`
       }
     `;
   }
@@ -127,6 +129,7 @@ export class CryptoDialog extends LitElement {
     if (this.selectedCoin) {
 
       this.coinValue = await this.service.getPrice(this.value, coin);
+      this.displayedCoinValue = this._coin.format(this.coinValue);
 
       this.hasTime = true;
 
