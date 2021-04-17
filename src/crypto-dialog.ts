@@ -27,10 +27,32 @@ export class CryptoDialog extends LitElement {
       right: 0;
       bottom: 0;
     }
+    
+    .coins {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .coin {
+      border: none;
+      width: 200px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .coin > span {
+      pointer-events: none;
+    }
+    
+    .coin > img {
+      width: 40px;
+      height: 40px;
+      pointer-events: none;
+    }  
   `;
 
   @property() wallet = '';
-  @property() message = ''
+  @property() message = '';
   @property() coins = '';
   @property() waitForConfirmation = false;
   @property() selectedCoin: string;
@@ -64,7 +86,10 @@ export class CryptoDialog extends LitElement {
 
   coinsTemp() {
     const coinTemp = (c) =>
-      html`<button class="coin" data-id="${c.id}" @click="${this.coinSelected}">${c.label}</button>`
+      html`<button class="coin" data-id="${c.id}" @click="${this.coinSelected}">
+        <img src="${c.icon}" alt="${c.label}">
+        <span>${c.label}</span>
+      </button>`;
 
     return html`<div class="coins">${this.shownCoins.map(coin => coinTemp(coin))}</div>`;
   }

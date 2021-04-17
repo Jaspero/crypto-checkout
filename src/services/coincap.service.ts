@@ -4,8 +4,12 @@ export class CoincapService extends CryptoService {
 
   url = 'https://api.coincap.io/v2/';
   coinMap = {
-    'btc': 'bitcoin',
-    'eth': 'ethereum',
+    btc: 'bitcoin',
+    eth: 'ethereum',
+    bch: 'bitcoin-cash',
+    ltc: 'litecoin',
+    bsv: 'bitcoin-sv',
+    xmr: 'monero'
   };
 
   async getPrice(value, coin) {
