@@ -6,7 +6,7 @@ on:
       - gh-pages-source
 jobs:
   release:
-    name: Release
+    name: Publish
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -20,4 +20,4 @@ jobs:
       - name: Release
         run: |
           npm run build
-          npm run gh-pages
+          npm run deploy
