@@ -1,20 +1,12 @@
-import {CryptoService} from '../crypto.service';
+import {CryptoService} from '../types/crypto.service';
 
 export class CoincapService extends CryptoService {
 
   url = 'https://api.coincap.io/v2/';
-  coinMap = {
-    btc: 'bitcoin',
-    eth: 'ethereum',
-    bch: 'bitcoin-cash',
-    ltc: 'litecoin',
-    bsv: 'bitcoin-sv',
-    xmr: 'monero'
-  };
 
   async getPrice(value, coin) {
     let res: any = await fetch(
-      this.url + 'assets/' + this.coinMap[coin.toLowerCase()]
+      this.url + 'assets/' + coin
     );
     res = await res.json();
 

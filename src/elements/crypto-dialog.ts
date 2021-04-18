@@ -1,8 +1,8 @@
+import 'qr-code-styling/lib/qr-code-styling.js';
 import {css, customElement, html, LitElement, property, query} from 'lit-element';
-import {AVAILABLE_COINS} from './available-coins.const';
-import {Coin} from './coin.interface';
-import {CryptoService} from './crypto.service';
-import {CoincapService} from './services/coincap.service';
+import {unsafeHTML} from 'lit-html/directives/unsafe-html';
+import {Coin} from '../types/coin.class';
+import {CryptoService} from '../types/crypto.service';
 
 @customElement('crypto-dialog')
 export class CryptoDialog extends LitElement {
@@ -44,18 +44,15 @@ export class CryptoDialog extends LitElement {
       pointer-events: none;
     }
     
-    .coin > img {
+    .coin > svg {
       width: 40px;
       height: 40px;
       pointer-events: none;
     }  
   `;
 
-  @property() wallet = '';
   @property() message = '';
-  @property() coins = '';
   @property() waitForConfirmation = false;
-  @property() selectedCoin: string;
   @property() hasTime = true;
   @property() loading = false;
   @property() paid = false;
@@ -64,9 +61,7 @@ export class CryptoDialog extends LitElement {
   @property() coinValue: number;
   @property() displayedCoinValue: string;
 
-  shownCoins: Coin[];
-
-  _coin: Coin;
+  @property() coin: Coin;
 
   @query('#jp-c-qr')
   _qrEl: HTMLDivElement;
@@ -75,23 +70,22 @@ export class CryptoDialog extends LitElement {
     return window.jpCrypto.service as CryptoService;
   }
 
+  get coins() {
+    return window.jpCrypto.coins;
+  }
+
   connectedCallback() {
     super.connectedCallback();
-
-    this.shownCoins = this.coins ?
-      this.coins.split(',')
-        .map(it => AVAILABLE_COINS.find(({id}) => id === it)) :
-      AVAILABLE_COINS;
   }
 
   coinsTemp() {
     const coinTemp = (c) =>
       html`<button class="coin" data-id="${c.id}" @click="${this.coinSelected}">
-        <img src="${c.icon}" alt="${c.label}">
+        ${unsafeHTML(c.icon)}
         <span>${c.label}</span>
       </button>`;
 
-    return html`<div class="coins">${this.shownCoins.map(coin => coinTemp(coin))}</div>`;
+    return html`<div class="coins">${this.coins.map(coin => coinTemp(coin))}</div>`;
   }
 
   payTemp() {
@@ -103,14 +97,14 @@ export class CryptoDialog extends LitElement {
           <div id="jp-c-qr"></div>
           <div>
             <div>${this.displayedCoinValue}</div>
-            <input readonly value="${this.wallet}" />
+            <input readonly value="${this.coin.wallet}" />
             <button @click="${() => this.selectCoin('')}">Back</button>
             <button @click="${() => this.confirmPay()}">Confirm Payment</button>
           </div>
         ` :
         html`<div class="time-out">
           <p>Timeout elapsed for this order.</p>
-          <button @click="${() => this.selectCoin(this.selectedCoin)}">Update Rate</button>
+          <button @click="${() => this.selectCoin(this.coin.id)}">Update Rate</button>
           <button @click="${() => this.selectCoin('')}">Select Different Coin</button>
         </div>`
       }
@@ -127,7 +121,7 @@ export class CryptoDialog extends LitElement {
 
     if (this.paid) {
       view = this.paidTemp();
-    } else if (this.selectedCoin) {
+    } else if (this.coin) {
       view = this.payTemp();
     } else {
       view = this.coinsTemp();
@@ -148,13 +142,12 @@ export class CryptoDialog extends LitElement {
   }
 
   async selectCoin(coin: string) {
-    this.selectedCoin = coin;
-    this._coin = AVAILABLE_COINS.find(it => it.id === coin);
+    this.coin = coin ? this.coins.find(it => it.id === coin) : null;
 
-    if (this.selectedCoin) {
+    if (this.coin) {
 
-      this.coinValue = await this.service.getPrice(this.value, coin);
-      this.displayedCoinValue = this._coin.format(this.coinValue);
+      this.coinValue = await this.coin.rate(this.value);
+      this.displayedCoinValue = this.coin.format(this.coinValue);
 
       this.hasTime = true;
 
@@ -165,18 +158,16 @@ export class CryptoDialog extends LitElement {
   }
 
   renderQr() {
-    // @ts-ignore
-    const qrCode = new window.QRCodeStyling({
+    const qrCode = new QRCodeStyling({
       width: 300,
       height: 300,
-      data: this._coin.qr(this.wallet, this.message, this.coinValue),
-      image: this._coin.icon,
+      data: this.coin.qr(this.coinValue, this.message),
+      image: 'data:image/svg+xml;base64,' + window.btoa(this.coin.icon),
       imageOptions: {
         margin: 10
       },
-      margin: 10,
       dotsOptions: {
-        color: this._coin.color,
+        color: this.coin.color,
         type: 'rounded'
       },
       backgroundOptions: {
@@ -202,7 +193,7 @@ export class CryptoDialog extends LitElement {
 
     this.dispatchEvent(new CustomEvent('paid', {
       detail: {
-        coin: this.selectedCoin,
+        coin: this.coin.id,
         amount: this.coinValue
       }
     }));
@@ -210,55 +201,4 @@ export class CryptoDialog extends LitElement {
     this.paid = true;
   }
 }
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'crypto-dialog': CryptoDialog;
-  }
-
-  interface Window {
-    jpCrypto: any;
-  }
-}
-
-window.jpCrypto = {
-  service: new CoincapService(),
-  init: (
-    config: {
-      wallet: string;
-      value: number;
-      message?: string;
-      coins?: string[];
-      target?: HTMLElement;
-      instructionsTemplate?: string;
-      paidTemplate?: string;
-    }
-  ) => {
-    const el = document.createElement('crypto-dialog');
-
-    if (config.instructionsTemplate) {
-      el.innerHTML += `<div slot="instructions">${config.instructionsTemplate}</div>`;
-    }
-
-    if (config.paidTemplate) {
-      el.innerHTML += `<div slot="paid">${config.paidTemplate}</div>`;
-    }
-
-    el.setAttribute('wallet', config.wallet);
-    el.setAttribute('value', config.value.toString());
-
-    if (config.message) {
-      el.setAttribute('message', config.message);
-    }
-
-    if (config.coins) {
-      el.setAttribute('coins', config.coins.join(','));
-    }
-
-    (config.target || document.body).appendChild(el);
-
-    return el;
-  }
-}
-
 
