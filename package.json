@@ -1,6 +1,6 @@
 {
   "name": "@jaspero/crypto-checkout",
-  "version": "0.0.0-development",
+  "version": "0.0.1",
   "description": "Open-source crypto currency checkout library built as a webcomponent.",
   "scripts": {
     "clean": "rimraf dev/dist",
@@ -8,7 +8,7 @@
     "build:watch": "tsc --watch --p dev/tsconfig.json",
     "serve": "web-dev-server --node-resolve --watch --open --root-dir dev",
     "build": "tsc && node publish.js",
-    "semantic-release": "semantic-release"
+    "semantic-release": "npm run build && semantic-release"
   },
   "author": {
     "name": "Jaspero Ltd",
