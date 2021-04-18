@@ -5,3 +5,9 @@
 # Crypto Checkout
 
 Crypto Checkout is an open-source library for implementing a crypto currency checkout flow in your webapp.
+
+## Get Started
+
+The latest instructions as well as demos can be found here:
+
+https://jaspero.github.io/crypto-checkout/
