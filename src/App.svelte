@@ -10,12 +10,12 @@
 	bsv.wallet = '1PvPkR8PCpPTq7bK7mQgBwwfX4KhW2eUGUq';
 	xmr.wallet = '1PvPkR8PCpPTq7bK7mQgBwwfX4KhW2eUGU';
 
-	init([btc, eth, ltc, bch, bsv, xmr]);
+	const crypto = init([btc, eth, ltc, bch, bsv, xmr]);
 
 	let amount = 1;
 
 	function openCheckout() {
-		window.jpCrypto.open({value: amount, message: 'crypto-checkout-demo'})
+		crypto.open({value: amount, message: 'crypto-checkout-demo'})
 	}
 </script>
 
