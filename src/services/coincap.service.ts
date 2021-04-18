@@ -12,4 +12,8 @@ export class CoincapService extends CryptoService {
 
     return value / res.data.priceUsd;
   }
+
+  async confirmPayment(value, note) {
+    return {success: true, value, note};
+  }
 }

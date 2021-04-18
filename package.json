@@ -16,8 +16,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "lit-element": "2.4.0",
-    "qr-code-styling": "1.3.4"
+    "lit-element": "2.4.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "5.0.1",
@@ -25,6 +24,7 @@
     "@semantic-release/npm": "7.1.1",
     "@web/dev-server": "0.1.11",
     "concurrently": "6.0.1",
+    "qr-code-styling": "1.3.4",
     "rimraf": "3.0.2",
     "semantic-release": "17.4.2",
     "typescript": "4.2.4",
@@ -48,7 +48,9 @@
       [
         "@semantic-release/git",
         {
-          "assets": ["lib"]
+          "assets": [
+            "lib"
+          ]
         }
       ]
     ]

@@ -31,6 +31,8 @@ export function init(
 		open: (
 			config: {
 				value: number;
+				closeOnEscape?: boolean;
+				waitForConfirmation?: boolean;
 				message?: string;
 				target?: HTMLElement;
 				instructionsTemplate?: string;
@@ -53,9 +55,15 @@ export function init(
 				el.setAttribute('message', config.message);
 			}
 
+			if (config.waitForConfirmation) {
+				el.setAttribute('waitForConfirmation', config.waitForConfirmation as any);
+			}
+
 			(config.target || document.body).appendChild(el);
 
 			return el;
 		}
 	};
+
+	return window.jpCrypto;
 }
