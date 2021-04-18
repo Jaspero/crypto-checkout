@@ -1,9 +1,9 @@
-name: Release
+name: Publish
 on:
   workflow_dispatch:
   push:
     branches:
-      - pages-source
+      - gh-pages-source
 jobs:
   release:
     name: Release
