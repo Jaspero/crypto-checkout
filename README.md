@@ -6,8 +6,18 @@
 
 Crypto Checkout is an open-source library for implementing a crypto currency checkout flow in your webapp.
 
-## Get Started
-
-The latest instructions as well as demos can be found here:
+Checkout the latest demo here:
 
 https://jaspero.github.io/crypto-checkout/
+
+## Installation
+
+To install this library, run:
+
+```bash
+npm i --save @jaspero/crypto-checkout
+```
+
+## License
+
+MIT © [Jaspero Ltd](mailto:info@jaspero.co)
