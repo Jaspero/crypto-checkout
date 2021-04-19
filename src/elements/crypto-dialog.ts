@@ -9,23 +9,20 @@ export class CryptoDialog extends LitElement {
   static styles = css`
     :host {
       position: fixed;
-      display: block;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
       top: 0;
-      left: 0;
-    }
-    .dialog {
-      position: fixed;
-      margin: auto;
-      background: white;
-      width: 500px;
-      height: 500px;
-      top: 0;
-      left: 0;
       right: 0;
       bottom: 0;
+      left: 0;
+      display: flex;
+      overflow: auto;
+      background: rgba(0,0,0,.35);
+    }
+
+    .dialog {
+      margin: auto;
+      background: white;
+      overflow: hidden;
+      border-radius: 1rem;
     }
     
     .coins {
@@ -138,11 +135,15 @@ export class CryptoDialog extends LitElement {
     }
 
     return html`
-      <button class="close" @click="${this.close}">Close</button>
-      <div class="dialog">
-        ${this.loading && html`<div class="loading"></div>` || ''}
-        ${view}
-      </div>
+      <article class="dialog">
+        <header class="dialog-header">
+          <button class="dialog-header-button" @click="${this.close}">Close</button>
+        </header>
+        <main class="dialog-content">
+          ${this.loading && html`<div class="loading"></div>` || ''}
+          ${view}
+        </main>
+      </article>
     `;
   }
 
