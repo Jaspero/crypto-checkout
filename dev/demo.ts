@@ -1,5 +1,4 @@
-import {bch, bsv, btc, eth, ltc, xmr} from '../src';
-import {init} from '../src/core';
+import {bch, bsv, btc, eth, ltc, xmr, init} from '../src';
 import '../src/elements/crypto-trigger';
 
 btc.wallet = 'bc1qk4th7mv0qzfxup5avrecratg24u9e0l56k9x7e';
