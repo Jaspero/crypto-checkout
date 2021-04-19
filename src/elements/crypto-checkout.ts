@@ -4,8 +4,8 @@ import {unsafeHTML} from 'lit-html/directives/unsafe-html';
 import {Coin} from '../types/coin.class';
 import {CryptoService} from '../types/crypto.service';
 
-@customElement('crypto-dialog')
-export class CryptoDialog extends LitElement {
+@customElement('crypto-checkout')
+export class CryptoCheckout extends LitElement {
   static styles = css`
     :host {
       --size-unit: min(4vw, 16px);
@@ -107,9 +107,12 @@ export class CryptoDialog extends LitElement {
     }  
   `;
 
+  @property({type: Boolean}) waitForConfirmation = false;
+  @property({type: Boolean}) target = false;
+  @property({type: Boolean}) closeOnEscape = true;
+  @property({type: Boolean}) lockCoin = false;
+
   @property() message = '';
-  @property({converter: k => k === 'true'}) waitForConfirmation = false;
-  @property({converter: k => k === 'true'}) target = false;
   @property() hasTime = true;
   @property() loading = false;
 
@@ -133,8 +136,29 @@ export class CryptoDialog extends LitElement {
     return window.jpCrypto.coins;
   }
 
+  onEsc = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      this.close();
+    }
+  };
+
   connectedCallback() {
+
+    if (this.coin) {
+      this.selectCoin(this.coin as unknown as string)
+        .catch();
+    }
+
+    if (this.closeOnEscape) {
+      window.addEventListener('keyup', this.onEsc);
+    }
+
     super.connectedCallback();
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('keyup', this.onEsc);
+    super.disconnectedCallback();
   }
 
   coinsTemp() {
@@ -170,7 +194,7 @@ export class CryptoDialog extends LitElement {
         <div>
           <div>${this.displayedCoinValue}</div>
           <input readonly value="${this.coin.wallet}" />
-          <button @click="${() => this.selectCoin('')}">Back</button>
+          ${this.lockCoin ? html`<button @click="${() => this.selectCoin('')}">Back</button>` : ''}
           <button @click="${() => this.confirmPay()}">Confirm Payment</button>
         </div>      
       `;

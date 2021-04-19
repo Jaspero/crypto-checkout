@@ -1,4 +1,4 @@
-import {CryptoDialog} from './elements/crypto-dialog';
+import {CryptoCheckout} from './elements/crypto-checkout';
 import {CryptoTimer} from './elements/crypto-timer';
 import {CryptoTrigger} from './elements/crypto-trigger';
 import {CoincapService} from './services/coincap.service';
@@ -8,7 +8,7 @@ import {JpCrypto} from './types/jp-crypto.interface';
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'crypto-dialog': CryptoDialog;
+		'crypto-checkout': CryptoCheckout;
 		'crypto-timer': CryptoTimer;
 		'crypto-trigger': CryptoTrigger
 	}
@@ -30,18 +30,8 @@ export function init(
 	window.jpCrypto = {
 		service: service || new CoincapService(),
 		coins: coins,
-		open: (
-			config: {
-				value: number;
-				closeOnEscape?: boolean;
-				waitForConfirmation?: boolean;
-				message?: string;
-				target?: HTMLElement;
-				instructionsTemplate?: string;
-				paidTemplate?: string;
-			}
-		) => {
-			const el = document.createElement('crypto-dialog');
+		open: config => {
+			const el = document.createElement('crypto-checkout');
 
 			if (config.instructionsTemplate) {
 				el.innerHTML += `<div slot="instructions">${config.instructionsTemplate}</div>`;
@@ -51,19 +41,23 @@ export function init(
 				el.innerHTML += `<div slot="paid">${config.paidTemplate}</div>`;
 			}
 
-			el.setAttribute('value', config.value.toString());
-
 			if (config.target) {
-			  el.setAttribute('target', true as any);
-      }
-
-			if (config.message) {
-				el.setAttribute('message', config.message);
+				el.setAttribute('target', true as any);
 			}
 
-			if (config.waitForConfirmation) {
-				el.setAttribute('waitForConfirmation', config.waitForConfirmation as any);
-			}
+			[
+				'message',
+				'closeOnEscape',
+				'value',
+				'waitForConfirmation',
+				'coin',
+				'lockCoin'
+			]
+				.forEach(key => {
+					if (config.hasOwnProperty(key)) {
+						el.setAttribute(key, config[key])
+					}
+				});
 
 			(config.target || document.body).appendChild(el);
 

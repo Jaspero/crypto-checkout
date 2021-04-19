@@ -3,7 +3,7 @@ export * from './core';
 /**
  * Elements
  */
-export * from './elements/crypto-dialog';
+export * from './elements/crypto-checkout';
 export * from './elements/crypto-timer';
 
 /**

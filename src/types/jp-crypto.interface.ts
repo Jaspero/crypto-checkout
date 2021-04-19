@@ -1,15 +1,20 @@
-import {CryptoDialog} from '../elements/crypto-dialog';
+import {CryptoCheckout} from '../elements/crypto-checkout';
 import {Coin} from './coin.class';
 import {CryptoService} from './crypto.service';
+
+export interface JpCryptoConfig {
+	value: number;
+	message?: string;
+	coin?: string;
+	lockCoin?: boolean;
+	target?: HTMLElement;
+	instructionsTemplate?: string;
+	paidTemplate?: string;
+	closeOnEscape?: boolean;
+}
 
 export interface JpCrypto {
 	service: CryptoService,
 	coins: Coin[];
-	open: (config: {
-		value: number;
-		message?: string;
-		target?: HTMLElement;
-		instructionsTemplate?: string;
-		paidTemplate?: string;
-	}) => CryptoDialog;
+	open: (config: JpCryptoConfig) => CryptoCheckout;
 }

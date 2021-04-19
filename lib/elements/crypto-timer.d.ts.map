@@ -1,1 +1,0 @@
-{"version":3,"file":"crypto-timer.d.ts","sourceRoot":"","sources":["../../src/elements/crypto-timer.ts"],"names":[],"mappings":"AAAA,OAAO,EAAsB,UAAU,EAAW,MAAM,aAAa,CAAC;AAEtE,qBACa,WAAY,SAAQ,UAAU;IAC7B,IAAI,EAAE,MAAM,CAAC;IACb,OAAO,EAAE,MAAM,CAAC;IAE5B,KAAK,EAAE,MAAM,CAAC;IAEd,MAAM,MAAC;IAEP,iBAAiB;IAoBjB,oBAAoB;IAKpB,MAAM;CAGP"}

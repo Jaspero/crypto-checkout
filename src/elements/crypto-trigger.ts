@@ -4,6 +4,9 @@ import {css, customElement, html, LitElement, property, queryAssignedNodes} from
 export class CryptoTrigger extends LitElement {
   @property({converter: k => parseFloat(k)}) value: number;
   @property() message: string;
+  @property() coin: string;
+  @property() waitForConfirmation: boolean;
+  @property() closeOnEscape: boolean;
 
   static styles = css`
     .hidden {display: none}
@@ -29,6 +32,7 @@ export class CryptoTrigger extends LitElement {
     window.jpCrypto.open({
       value: this.value,
       message: this.message,
+      ...this.coin && {coin: this.coin},
       ...this._intro && this._intro.length && {instructionsTemplate: this._intro[0].innerHTML},
       ...this._paid && this._paid.length && {paidTemplate: this._paid[0].innerHTML}
     })
