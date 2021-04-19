@@ -8,7 +8,10 @@ import {CryptoService} from '../types/crypto.service';
 export class CryptoDialog extends LitElement {
   static styles = css`
     :host {
+      --size-unit: min(4vw, 16px);
+
       position: fixed;
+      z-index: 2147483647;
       top: 0;
       right: 0;
       bottom: 0;
@@ -16,35 +19,91 @@ export class CryptoDialog extends LitElement {
       display: flex;
       overflow: auto;
       background: rgba(0,0,0,.35);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      font-size: var(--size-unit);
     }
 
-    .dialog {
+    .cc {
       margin: auto;
       background: white;
-      overflow: hidden;
-      border-radius: 1rem;
+      border-radius: 2em;
+      padding: 4em;
+      box-shadow: 0 0 .1em rgba(0,0,0,.2), 0 .5em 1em rgba(0,0,0,.1), 0 1em 2em rgba(0,0,0,.05);
+    }
+
+    .cc-close {
+      position: fixed;
+      top: .25em;
+      right: .25em;
+      padding: 0;
+      border: none;
+      font-size: inherit;
+      cursor: pointer;
+      background: white;
+      border-radius: 2em;
+    }
+
+    .cc-close:hover,
+    .cc-close:focus {
+      background: #eee;
+    }
+
+    .cc-close-icon {
+      width: 1.5em;
+      height: 1.5em;
+      display: block;
     }
     
-    .coins {
+    .cc-coins {
       display: flex;
       flex-direction: column;
     }
+
+    .cc-coins-title {
+      font-size: 1.375em;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .cc-coins-description {
+      font-size: 1em;
+      margin: .25em 0 2em;
+      opacity: 0.6;
+    }
     
-    .coin {
-      border: none;
-      width: 200px;
+    .cc-coins-button {
+      font-size: inherit;
+      font-family: inherit;
       display: flex;
       align-items: center;
+      background: none;
+      border-top: .1em solid #ccc;
+      border-right: .1em solid #ccc;
+      border-bottom: none;
+      border-left: .1em solid #ccc;
+      padding: 1.5em 4em 1.5em 1.5em;
+      cursor: pointer;
+    }
+
+    .cc-coins-button:first-of-type {
+      border-top-left-radius: 1em;
+      border-top-right-radius: 1em;
+    }
+    .cc-coins-button:last-of-type {
+      border-bottom-left-radius: 1em;
+      border-bottom-right-radius: 1em;
+      border-bottom: .1em solid #ccc;
+    }
+
+    .cc-coins-button:hover,
+    .cc-coins-button:focus {
+      background: #eee;
     }
     
-    .coin > span {
-      pointer-events: none;
-    }
-    
-    .coin > svg {
-      width: 40px;
-      height: 40px;
-      pointer-events: none;
+    .cc-coins-button > svg {
+      width: 2em;
+      height: 2em;
+      margin-right: 1em;
     }  
   `;
 
@@ -80,12 +139,18 @@ export class CryptoDialog extends LitElement {
 
   coinsTemp() {
     const coinTemp = (c) =>
-      html`<button class="coin" data-id="${c.id}" @click="${this.coinSelected}">
+      html`<button class="cc-coins-button" data-id="${c.id}" @click="${this.coinSelected}">
         ${unsafeHTML(c.icon)}
-        <span>${c.label}</span>
+        ${c.label}
       </button>`;
 
-    return html`<div class="coins">${this.coins.map(coin => coinTemp(coin))}</div>`;
+    return html`
+      <div class="cc-coins">
+        <h1 class="cc-coins-title">Currency</h1>
+        <p class="cc-coins-description">Select one crypto currency</p>
+        ${this.coins.map(coin => coinTemp(coin))}
+      </div>
+    `;
   }
 
   payTemp() {
@@ -143,14 +208,12 @@ export class CryptoDialog extends LitElement {
     }
 
     return html`
-      <article class="dialog">
-        <header class="dialog-header">
-          <button class="dialog-header-button" @click="${this.close}">Close</button>
-        </header>
-        <main class="dialog-content">
-          ${this.loading && html`<div class="loading"></div>` || ''}
-          ${view}
-        </main>
+      <button class="cc-close" @click="${this.close}" aria-label="Close dialog" title="Close dialog">
+        <svg class="cc-close-icon" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M16 8l-8 8m8 0L8 8"/></svg>
+      </button>
+      <article class="cc">
+        ${this.loading && html`<div class="loading"></div>` || ''}
+        ${view}
       </article>
     `;
   }
