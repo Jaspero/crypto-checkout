@@ -9,7 +9,7 @@
     "serve": "web-dev-server --node-resolve --watch --open --root-dir dev",
     "build": "tsc && node publish.js",
     "semantic-release": "npm run build && semantic-release",
-    "postversion": "cp package.json .. && cd .. && rm -rf lib"
+    "postversion": "cp package.json .."
   },
   "author": {
     "name": "Jaspero Ltd",
@@ -44,9 +44,7 @@
           "pkgRoot": "lib"
         }
       ],
-      ["@semantic-release/git", {
-        "assets": ["package.json"]
-      }]
+      "@semantic-release/git"
     ]
   }
 }
