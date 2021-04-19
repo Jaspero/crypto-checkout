@@ -50,6 +50,7 @@ export class CryptoDialog extends LitElement {
 
   @property() message = '';
   @property({converter: k => k === 'true'}) waitForConfirmation = false;
+  @property({converter: k => k === 'true'}) target = false;
   @property() hasTime = true;
   @property() loading = false;
 
@@ -132,6 +133,13 @@ export class CryptoDialog extends LitElement {
       view = this.payTemp();
     } else {
       view = this.coinsTemp();
+    }
+
+    if (this.target) {
+      return html`
+        ${this.loading && html`<div class="loading"></div>` || ''}
+        ${view}
+      `;
     }
 
     return html`

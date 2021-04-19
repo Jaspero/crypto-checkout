@@ -1,5 +1,6 @@
 import {CryptoDialog} from './elements/crypto-dialog';
 import {CryptoTimer} from './elements/crypto-timer';
+import {CryptoTrigger} from './elements/crypto-trigger';
 import {CoincapService} from './services/coincap.service';
 import {Coin} from './types/coin.class';
 import {CryptoService} from './types/crypto.service';
@@ -9,6 +10,7 @@ declare global {
 	interface HTMLElementTagNameMap {
 		'crypto-dialog': CryptoDialog;
 		'crypto-timer': CryptoTimer;
+		'crypto-trigger': CryptoTrigger
 	}
 
 	interface Window {
@@ -50,6 +52,10 @@ export function init(
 			}
 
 			el.setAttribute('value', config.value.toString());
+
+			if (config.target) {
+			  el.setAttribute('target', true as any);
+      }
 
 			if (config.message) {
 				el.setAttribute('message', config.message);

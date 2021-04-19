@@ -1,5 +1,6 @@
 import {bch, bsv, btc, eth, ltc, xmr} from '../src';
 import {init} from '../src/core';
+import '../src/elements/crypto-trigger';
 
 btc.wallet = 'bc1qk4th7mv0qzfxup5avrecratg24u9e0l56k9x7e';
 eth.wallet = '0x751721F9754A35B4f86BaE06295406ea335eba46';
@@ -20,7 +21,8 @@ window.onload = () => {
 			value,
 			message: 'some-other-example',
 			paidTemplate: `Thank you for using crypto`,
-			instructionsTemplate: 'Use the below to pay.'
+			instructionsTemplate: 'Use the below to pay.',
+      // target: document.querySelector('.wrapper')
 		});
 
 		el.addEventListener('paid', a => {
