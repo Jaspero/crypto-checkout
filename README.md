@@ -18,6 +18,8 @@ To install this library, run:
 npm i --save @jaspero/crypto-checkout
 ```
 
+For more information read our [wiki](https://github.com/Jaspero/crypto-checkout/wiki/Getting-Started).
+
 ## License
 
 MIT © [Jaspero Ltd](mailto:info@jaspero.co)
