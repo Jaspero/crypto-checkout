@@ -8,8 +8,6 @@ import {CryptoService} from '../types/crypto.service';
 export class CryptoCheckout extends LitElement {
   static styles = css`
     :host {
-      --size-unit: min(4vw, 16px);
-
       position: fixed;
       z-index: 2147483647;
       top: 0;
@@ -20,14 +18,16 @@ export class CryptoCheckout extends LitElement {
       overflow: auto;
       background: rgba(0,0,0,.35);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-      font-size: var(--size-unit);
+      font-size: 16px;
     }
 
     .cc {
       margin: auto;
+      width: 100%;
+      max-width: 320px;
       background: white;
-      border-radius: 2em;
-      padding: 4em;
+      border-radius: 1.5em;
+      padding: 3em;
       box-shadow: 0 0 .1em rgba(0,0,0,.2), 0 .5em 1em rgba(0,0,0,.1), 0 1em 2em rgba(0,0,0,.05);
     }
 
@@ -59,19 +59,19 @@ export class CryptoCheckout extends LitElement {
       flex-direction: column;
     }
 
-    .cc-coins-title {
+    .cc-title {
       font-size: 1.375em;
       font-weight: bold;
       margin: 0;
     }
 
-    .cc-coins-description {
+    .cc-description {
       font-size: 1em;
       margin: .25em 0 2em;
       opacity: 0.6;
     }
     
-    .cc-coins-button {
+    .cc-coin {
       font-size: inherit;
       font-family: inherit;
       display: flex;
@@ -85,26 +85,87 @@ export class CryptoCheckout extends LitElement {
       cursor: pointer;
     }
 
-    .cc-coins-button:first-of-type {
+    .cc-coin:first-of-type {
       border-top-left-radius: 1em;
       border-top-right-radius: 1em;
     }
-    .cc-coins-button:last-of-type {
+    
+    .cc-coin:last-of-type {
       border-bottom-left-radius: 1em;
       border-bottom-right-radius: 1em;
       border-bottom: .1em solid #ccc;
     }
 
-    .cc-coins-button:hover,
+    .cc-coin:hover,
     .cc-coins-button:focus {
       background: #eee;
     }
     
-    .cc-coins-button > svg {
+    .cc-coin > svg {
       width: 2em;
       height: 2em;
       margin-right: 1em;
-    }  
+    }
+    
+    #cc-qr {
+      text-align: center;
+      margin: 1.5em 0;
+    }
+
+    #cc-qr > canvas {
+      width: 100%;
+    }
+
+    .cc-button {
+      cursor: pointer;
+      padding: .75em 1em;
+      border: 1px solid #ddd;
+      border-radius: .5em;
+      background: white;
+      color: inherit;
+      box-shadow: 0 .1em .25em rgba(0,0,0,.25);
+      font-size: inherit;
+      font-family: inherit;
+    }
+
+    .cc-button:hover,
+    .cc-button:focus {
+      background: #eee;
+    }
+
+    .cc-figure {
+      margin: 1em 0;
+    }
+
+    .cc-figure-title {
+      opacity: .6;
+      font-size: .875em;
+      margin-bottom: .25em;
+    }
+
+    .cc-figure-content {
+      word-break: break-word;
+    }
+
+    .cc-actions {
+      margin-top: 2em;
+    }
+
+    .cc-loading {
+      display: block;
+      border-radius: 50%;
+      width: 2em;
+      height: 2em;
+      border: .15em solid;
+      margin: auto;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      animation: 1s loading infinite;
+    }
+
+    @keyframes loading {
+      to { transform: rotate(360deg); }
+    }
   `;
 
   @property({type: Boolean}) waitForConfirmation = false;
@@ -125,7 +186,7 @@ export class CryptoCheckout extends LitElement {
 
   @property() coin: Coin;
 
-  @query('#jp-c-qr')
+  @query('#cc-qr')
   _qrEl: HTMLDivElement;
 
   get service() {
@@ -163,15 +224,15 @@ export class CryptoCheckout extends LitElement {
 
   coinsTemp() {
     const coinTemp = (c) =>
-      html`<button class="cc-coins-button" data-id="${c.id}" @click="${this.coinSelected}">
+      html`<button class="cc-coin" data-id="${c.id}" @click="${this.coinSelected}">
         ${unsafeHTML(c.icon)}
         ${c.label}
       </button>`;
 
     return html`
+      <h1 class="cc-title">Currency</h1>
+      <p class="cc-description">Select one crypto currency</p>
       <div class="cc-coins">
-        <h1 class="cc-coins-title">Currency</h1>
-        <p class="cc-coins-description">Select one crypto currency</p>
         ${this.coins.map(coin => coinTemp(coin))}
       </div>
     `;
@@ -182,30 +243,37 @@ export class CryptoCheckout extends LitElement {
     if (this.hasTime) {
       if (this.error) {
         return html`
-          <div class="error">
-            <p>${this.error}</p>
-          </div>`;
+          <h1 class="cc-title">Error</h1>
+          <p class="cc-description">${this.error}</p>
+        `;
       }
 
       return html`
+        <h1 class="cc-title">CoinName</h1>
+        <p class="cc-description">Time left to finish payment: <crypto-timer time="15:00" @finished="${this.timeOut}"></crypto-timer></p>
         <slot name="instructions"></slot>
-        <crypto-timer time="15:00" @finished="${this.timeOut}"></crypto-timer>
-        <div id="jp-c-qr"></div>
-        <div>
-          <div>${this.displayedCoinValue}</div>
-          <input readonly value="${this.coin.wallet}" />
-          ${this.lockCoin ? html`<button @click="${() => this.selectCoin('')}">Back</button>` : ''}
-          <button @click="${() => this.confirmPay()}">Confirm Payment</button>
-        </div>      
+        <div id="cc-qr"></div>
+        <figure class="cc-figure">
+          <figcaption class="cc-figure-title">Amount to pay:</figcaption>
+          <div class="cc-figure-content">${this.displayedCoinValue}</div>
+        </figure>
+        <figure class="cc-figure">
+          <figcaption class="cc-figure-title">Your wallet link:</figcaption>
+          <div class="cc-figure-content">${this.coin.wallet}</div>
+        </figure>
+        <div class="cc-actions">
+          ${this.lockCoin ? html`<button class="cc-button" @click="${() => this.selectCoin('')}">Back</button>` : ''}
+          <button class="cc-button" @click="${() => this.confirmPay()}">Confirm Payment</button>
+        </div>
       `;
     }
 
     return html`
-      <div class="time-out">
-        <p>Timeout elapsed for this order.</p>
-        <button @click="${() => this.selectCoin(this.coin.id)}">Update Rate</button>
-        <button @click="${() => this.selectCoin('')}">Select Different Coin</button>
-      </div>`;
+      <h1 class="cc-title">Time's up</h1>
+      <p class="cc-description">Timeout elapsed for this order.</p>
+      <button class="cc-button" @click="${() => this.selectCoin(this.coin.id)}">Update Rate</button>
+      <button class="cc-button" @click="${() => this.selectCoin('')}">Select Different Coin</button>
+    `;
   }
 
   paidTemp() {
@@ -277,7 +345,7 @@ export class CryptoCheckout extends LitElement {
         type: 'rounded'
       },
       backgroundOptions: {
-        color: '#e9ebee',
+        color: '#fafafa',
       }
     });
 
