@@ -8,7 +8,7 @@ import externalGlobals from 'rollup-plugin-external-globals';
 const config = {
   input: 'lib/index.js',
   output: {
-    dir: 'dist',
+    dir: 'lib',
     format: 'esm',
     sourcemap: true
   },
