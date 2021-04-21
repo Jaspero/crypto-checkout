@@ -11,6 +11,7 @@ export interface JpCryptoConfig {
 	instructionsTemplate?: string;
 	paidTemplate?: string;
 	closeOnEscape?: boolean;
+	waitForConfirmation?: boolean;
 }
 
 export interface JpCrypto {
