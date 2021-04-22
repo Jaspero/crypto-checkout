@@ -6,6 +6,20 @@
     <meta charset="utf-8">
     <title>DEV</title>
     <script type="module" src="dist/dev/demo.js"></script>
+    <style>
+      .wrapper-outer {
+        padding: 2rem;
+        background: rebeccapurple;
+      }
+      .wrapper-inner {
+        max-width: 300px;
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,.75);
+        margin: auto;
+      }
+    </style>
   </head>
   <body>
   <button id="crypto">Pay With Crypto</button>
@@ -20,8 +34,10 @@
     </template>
   </crypto-trigger>
 
-  <div class="wrapper">
+  <div class="wrapper-outer">
+    <div class="wrapper-inner">
 
+    </div>
   </div>
   </body>
 </html>
