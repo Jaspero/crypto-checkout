@@ -21,7 +21,7 @@ window.onload = () => {
 			message: 'some-other-example',
 			paidTemplate: `Thank you for using crypto`,
 			instructionsTemplate: 'Use the below to pay.',
-			coin: 'ETH'
+			coin: 'ETH',
       target: document.querySelector('.wrapper-inner')
 		});
 
