@@ -19,6 +19,7 @@ export class CryptoCheckout extends LitElement {
       background: rgba(0,0,0,.35);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
       font-size: 16px;
+      color: #000;
     }
 
     .cc {
