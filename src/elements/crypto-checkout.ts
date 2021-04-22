@@ -8,6 +8,12 @@ import {CryptoService} from '../types/crypto.service';
 export class CryptoCheckout extends LitElement {
   static styles = css`
     :host {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      font-size: 16px;
+      color: #000;
+    }
+
+    .cc {
       position: fixed;
       z-index: 2147483647;
       top: 0;
@@ -17,12 +23,9 @@ export class CryptoCheckout extends LitElement {
       display: flex;
       overflow: auto;
       background: rgba(0,0,0,.35);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-      font-size: 16px;
-      color: #000;
     }
 
-    .cc {
+    .cc-content {
       margin: auto;
       width: 100%;
       max-width: 320px;
@@ -115,6 +118,7 @@ export class CryptoCheckout extends LitElement {
 
     #cc-qr > canvas {
       width: 100%;
+      max-width: 300px;
     }
 
     .cc-button {
@@ -295,19 +299,21 @@ export class CryptoCheckout extends LitElement {
 
     if (this.target) {
       return html`
-        ${this.loading && html`<div class="loading"></div>` || ''}
+        ${this.loading && html`<div class="cc-loading"></div>` || ''}
         ${view}
       `;
     }
 
     return html`
-      <button class="cc-close" @click="${this.close}" aria-label="Close dialog" title="Close dialog">
-        <svg class="cc-close-icon" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M16 8l-8 8m8 0L8 8"/></svg>
-      </button>
-      <article class="cc">
-        ${this.loading && html`<div class="loading"></div>` || ''}
-        ${view}
-      </article>
+      <div class="cc">
+        <button class="cc-close" @click="${this.close}" aria-label="Close dialog" title="Close dialog">
+          <svg class="cc-close-icon" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M16 8l-8 8m8 0L8 8"/></svg>
+        </button>
+        <article class="cc-content">
+          ${this.loading && html`<div class="cc-loading"></div>` || ''}
+          ${view}
+        </article>
+      </div>
     `;
   }
 

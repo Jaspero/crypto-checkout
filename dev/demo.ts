@@ -22,7 +22,7 @@ window.onload = () => {
 			paidTemplate: `Thank you for using crypto`,
 			instructionsTemplate: 'Use the below to pay.',
 			coin: 'ETH'
-      // target: document.querySelector('.wrapper')
+      target: document.querySelector('.wrapper-inner')
 		});
 
 		el.addEventListener('paid', a => {
