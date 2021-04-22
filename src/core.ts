@@ -15,6 +15,7 @@ declare global {
 
 	interface Window {
 		jpCrypto: JpCrypto;
+		ethereum?: any;
 	}
 
 	class QRCodeStyling {

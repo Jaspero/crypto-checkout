@@ -243,6 +243,17 @@ export class CryptoCheckout extends LitElement {
     `;
   }
 
+  paymentMethodsTemp() {
+
+    const methodTemp = (c) =>
+      html`<button class="cc-method" data-id="${c.id}" @click="${this.paymentMethodSelected}">
+        ${unsafeHTML(c.icon)}
+        ${c.label}
+      </button>`;
+
+    return html`<div class="cc-methods">${this.coin.paymentMethods.filter(method => method.available()).map(method => methodTemp(method))}</div>`;
+  }
+
   payTemp() {
 
     if (this.hasTime) {
@@ -266,6 +277,9 @@ export class CryptoCheckout extends LitElement {
           <figcaption class="cc-figure-title">Your wallet link:</figcaption>
           <div class="cc-figure-content">${this.coin.wallet}</div>
         </figure>
+        
+        ${this.coin.paymentMethods?.length ? this.paymentMethodsTemp() : ''}
+        
         <div class="cc-actions">
           ${this.lockCoin ? html`<button class="cc-button" @click="${() => this.selectCoin('')}">Back</button>` : ''}
           <button class="cc-button" @click="${() => this.confirmPay()}">Confirm Payment</button>
@@ -320,6 +334,16 @@ export class CryptoCheckout extends LitElement {
   async coinSelected(event: PointerEvent) {
     const target = event.target as HTMLButtonElement;
     await this.selectCoin(target.dataset.id)
+  }
+
+  async paymentMethodSelected(event: PointerEvent) {
+    const target = event.target as HTMLButtonElement;
+
+    const method = this.coin.paymentMethods.find(it => it.id === target.dataset.id);
+
+    await method.transfer(this.coin, this.coinValue);
+
+    this.markPaid();
   }
 
   async selectCoin(coin: string) {
@@ -378,6 +402,10 @@ export class CryptoCheckout extends LitElement {
       }
     }
 
+    this.markPaid();
+  }
+
+  markPaid() {
     this.dispatchEvent(new CustomEvent('paid', {
       detail: {
         coin: this.coin.id,

@@ -1,12 +1,14 @@
+import {PaymentMethod} from './payment-method.class';
+
 export class Coin {
 	constructor(
 		public id: string,
 		public wallet: string,
 		public label: string,
 		public icon: string,
-		public color: string
-	) {
-	}
+		public color: string,
+		public paymentMethods?: PaymentMethod[]
+	) {}
 
 	qr(amount: number, note?: string) {
 
