@@ -341,9 +341,9 @@ export class CryptoCheckout extends LitElement {
 
     const method = this.coin.paymentMethods.find(it => it.id === target.dataset.id);
 
-    await method.transfer(this.coin, this.coinValue);
+    const transaction = await method.transfer(this.coin, this.coinValue);
 
-    this.markPaid();
+    this.markPaid({transaction});
   }
 
   async selectCoin(coin: string) {
@@ -405,11 +405,12 @@ export class CryptoCheckout extends LitElement {
     this.markPaid();
   }
 
-  markPaid() {
+  markPaid(metadata?: any) {
     this.dispatchEvent(new CustomEvent('paid', {
       detail: {
         coin: this.coin.id,
-        amount: this.coinValue
+        amount: this.coinValue,
+        ...metadata && {metadata}
       }
     }));
 

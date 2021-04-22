@@ -9,5 +9,5 @@ export abstract class PaymentMethod {
 
 	abstract available(): boolean;
 
-	abstract transfer(coin: Coin, value: number): Promise<boolean>;
+	abstract transfer(coin: Coin, value: number): Promise<any>;
 }

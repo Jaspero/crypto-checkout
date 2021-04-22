@@ -23,12 +23,10 @@ class MetaMask extends PaymentMethod {
 			throw new Error('Account missing.');
 		}
 
-		await this.eth.request({
+		return this.eth.request({
 			method: 'eth_sendTransaction',
 			params: [{from: accounts[0], to: coin.wallet, value: wei}]
 		});
-
-		return true;
 	}
 }
 
