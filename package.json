@@ -1,6 +1,6 @@
 {
   "name": "@jaspero/crypto-checkout",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "description": "Open-source crypto currency checkout library built as a webcomponent.",
   "scripts": {
     "clean": "rimraf dev/dist",
