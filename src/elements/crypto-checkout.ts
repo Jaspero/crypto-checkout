@@ -281,7 +281,7 @@ export class CryptoCheckout extends LitElement {
         ${this.coin.paymentMethods?.length ? this.paymentMethodsTemp() : ''}
         
         <div class="cc-actions">
-          ${this.lockCoin ? html`<button class="cc-button" @click="${() => this.selectCoin('')}">Back</button>` : ''}
+          ${this.lockCoin ? '' : html`<button class="cc-button" @click="${() => this.selectCoin('')}">Back</button>`}
           <button class="cc-button" @click="${() => this.confirmPay()}">Confirm Payment</button>
         </div>
       `;
