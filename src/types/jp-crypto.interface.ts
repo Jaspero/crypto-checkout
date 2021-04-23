@@ -15,7 +15,8 @@ export interface JpCryptoConfig {
 }
 
 export interface JpCrypto {
-	service: CryptoService,
+	service: CryptoService;
+  translations: {[key: string]: string};
 	coins: Coin[];
 	open: (config: JpCryptoConfig) => CryptoCheckout;
 }

@@ -235,8 +235,8 @@ export class CryptoCheckout extends LitElement {
       </button>`;
 
     return html`
-      <h1 class="cc-title">Currency</h1>
-      <p class="cc-description">Select one crypto currency</p>
+      <h1 class="cc-title">${this.translation('CURRENCY')}</h1>
+      <p class="cc-description">${this.translation('SELECT_CURRENCY')}</p>
       <div class="cc-coins">
         ${this.coins.map(coin => coinTemp(coin))}
       </div>
@@ -259,39 +259,39 @@ export class CryptoCheckout extends LitElement {
     if (this.hasTime) {
       if (this.error) {
         return html`
-          <h1 class="cc-title">Error</h1>
+          <h1 class="cc-title">${this.translation('ERROR')}</h1>
           <p class="cc-description">${this.error}</p>
         `;
       }
 
       return html`
-        <h1 class="cc-title">CoinName</h1>
-        <p class="cc-description">Time left to finish payment: <crypto-timer time="15:00" @finished="${this.timeOut}"></crypto-timer></p>
+        <h1 class="cc-title">${this.coin.label}</h1>
+        <p class="cc-description">${this.translation('TIME_LEFT')}: <crypto-timer time="15:00" @finished="${this.timeOut}"></crypto-timer></p>
         <slot name="instructions"></slot>
         <div id="cc-qr"></div>
         <figure class="cc-figure">
-          <figcaption class="cc-figure-title">Amount to pay:</figcaption>
+          <figcaption class="cc-figure-title">${this.translation('AMOUNT_TO_PAY')}:</figcaption>
           <div class="cc-figure-content">${this.displayedCoinValue}</div>
         </figure>
         <figure class="cc-figure">
-          <figcaption class="cc-figure-title">Your wallet link:</figcaption>
+          <figcaption class="cc-figure-title">${this.translation('WALLET_ADDRESS')}:</figcaption>
           <div class="cc-figure-content">${this.coin.wallet}</div>
         </figure>
         
         ${this.coin.paymentMethods?.length ? this.paymentMethodsTemp() : ''}
         
         <div class="cc-actions">
-          ${this.lockCoin ? '' : html`<button class="cc-button" @click="${() => this.selectCoin('')}">Back</button>`}
-          <button class="cc-button" @click="${() => this.confirmPay()}">Confirm Payment</button>
+          ${this.lockCoin ? '' : html`<button class="cc-button" @click="${() => this.selectCoin('')}">${this.translation('BACK')}</button>`}
+          <button class="cc-button" @click="${() => this.confirmPay()}">${this.translation('CONFIRM')}</button>
         </div>
       `;
     }
 
     return html`
-      <h1 class="cc-title">Time's up</h1>
-      <p class="cc-description">Timeout elapsed for this order.</p>
-      <button class="cc-button" @click="${() => this.selectCoin(this.coin.id)}">Update Rate</button>
-      <button class="cc-button" @click="${() => this.selectCoin('')}">Select Different Coin</button>
+      <h1 class="cc-title">${this.translation('TIME_OUT')}</h1>
+      <p class="cc-description">${this.translation('TIME_OUT_DESCRIPTION')}</p>
+      <button class="cc-button" @click="${() => this.selectCoin(this.coin.id)}">${this.translation('UPDATE_RATE')}</button>
+      <button class="cc-button" @click="${() => this.selectCoin('')}">${this.translation('CHANGE_SELECTION')}</button>
     `;
   }
 
@@ -320,7 +320,7 @@ export class CryptoCheckout extends LitElement {
 
     return html`
       <div class="cc">
-        <button class="cc-close" @click="${this.close}" aria-label="Close dialog" title="Close dialog">
+        <button class="cc-close" @click="${this.close}" aria-label="Close dialog" title="${this.translation('CLOSE_DIALOG')}">
           <svg class="cc-close-icon" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M16 8l-8 8m8 0L8 8"/></svg>
         </button>
         <article class="cc-content">
@@ -415,6 +415,10 @@ export class CryptoCheckout extends LitElement {
     }));
 
     this.paid = true;
+  }
+
+  translation(value: string) {
+    return window.jpCrypto.translations[value] || 'MISSING_TRANSLATION';
   }
 }
 

@@ -26,11 +26,28 @@ declare global {
 
 export function init(
 	coins: Coin[],
-	service?: CryptoService
+	service?: CryptoService,
+  translations?: {[key: string]: string}
 ) {
 	window.jpCrypto = {
 		service: service || new CoincapService(),
 		coins: coins,
+    translations: {
+		  'CURRENCY': 'Currency',
+      'SELECT_CURRENCY': 'Select one crypto currency',
+      'ERROR': 'Error',
+      'TIME_LEFT': 'Time left to finish payment',
+      'AMOUNT_TO_PAY': 'Amount to pay',
+      'WALLET_ADDRESS': 'Payment address',
+      'BACK': 'Back',
+      'CONFIRM': 'Confirm Payment',
+      'TIME_OUT': `Time's up`,
+      'TIME_OUT_DESCRIPTION': 'Timeout elapsed for this order.',
+      'UPDATE_RATE': 'Update Rate',
+      'CHANGE_SELECTION': 'Select Different Coin',
+      'CLOSE_DIALOG': 'Close dialog',
+		  ...translations || {}
+    },
 		open: config => {
 			const el = document.createElement('crypto-checkout');
 
@@ -63,7 +80,7 @@ export function init(
 			(config.target || document.body).appendChild(el);
 
 			return el;
-		}
+		},
 	};
 
 	return window.jpCrypto;
