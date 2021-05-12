@@ -15,6 +15,9 @@ export * from './coins/bch';
 export * from './coins/bsv';
 export * from './coins/ltc';
 export * from './coins/xmr';
+export * from './coins/doge';
+export * from './coins/usdt';
+export * from './coins/bnb';
 
 /**
  * Services
