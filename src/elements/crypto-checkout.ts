@@ -207,6 +207,7 @@ export class CryptoCheckout extends LitElement {
 
   @property() paid = false;
   @property() error: string;
+  @property() shownCoins = [];
 
   @property({converter: (k) => parseInt(k, 10)}) value: number;
   @property() coinValue: number;
@@ -232,6 +233,8 @@ export class CryptoCheckout extends LitElement {
   };
 
   connectedCallback() {
+
+    this.shownCoins = [...this.coins];
 
     if (this.coin) {
       this.selectCoin(this.coin as unknown as string)
@@ -266,12 +269,24 @@ export class CryptoCheckout extends LitElement {
             <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
           </svg>
         </div>
-        <input name="paf" placeholder="${this.translation('SEARCH')}" />
+        <input name="paf" placeholder="${this.translation('SEARCH')}" @input="${this.search}" />
       </div>` : ''}
       <div class="cc-coins">
-        ${this.coins.map(coin => coinTemp(coin))}
+        ${this.shownCoins.map(coin => coinTemp(coin))}
       </div>
     `;
+  }
+
+  search(e: any) {
+    const value = e.path[0].value.toLowerCase().trim();
+
+    if (value) {
+      this.shownCoins = this.coins.filter(coin => (coin.id + coin.label).toLowerCase().includes(value));
+    } else {
+      this.shownCoins = [...this.coins];
+    }
+
+    console.log(value, this.shownCoins);
   }
 
   paymentMethodsTemp() {
@@ -381,7 +396,7 @@ export class CryptoCheckout extends LitElement {
     this.coin = coin ? this.coins.find(it => it.id === coin) : null;
 
     if (this.coin) {
-
+      this.shownCoins = [...this.coins];
       this.coinValue = await this.coin.rate(this.value);
       this.displayedCoinValue = this.coin.format(this.coinValue);
 
