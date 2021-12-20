@@ -52,6 +52,8 @@ export function init(
 		open: config => {
 			const el = document.createElement('crypto-checkout');
 
+			window.jpCrypto.instance = el;
+
 			if (config.instructionsTemplate) {
 				el.innerHTML += `<div slot="instructions">${config.instructionsTemplate}</div>`;
 			}
@@ -82,6 +84,15 @@ export function init(
 
 			return el;
 		},
+    close: () => {
+      const el = window.jpCrypto.instance;
+
+		  if (!el) {
+		    return;
+      }
+
+		  el.parentNode.removeChild(el);
+    }
 	};
 
 	return window.jpCrypto;

@@ -19,4 +19,6 @@ export interface JpCrypto {
   translations: {[key: string]: string};
 	coins: Coin[];
 	open: (config: JpCryptoConfig) => CryptoCheckout;
+	close: () => void;
+	instance?: HTMLElement;
 }
