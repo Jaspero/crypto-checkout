@@ -46,6 +46,7 @@ export function init(
       'UPDATE_RATE': 'Update Rate',
       'CHANGE_SELECTION': 'Select Different Coin',
       'CLOSE_DIALOG': 'Close dialog',
+			'SEARCH': 'Search...',
 		  ...translations || {}
     },
 		open: config => {

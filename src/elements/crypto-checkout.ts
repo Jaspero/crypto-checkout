@@ -61,6 +61,8 @@ export class CryptoCheckout extends LitElement {
     .cc-coins {
       display: flex;
       flex-direction: column;
+      max-height: 350px;
+      overflow-y: auto;
     }
 
     .cc-title {
@@ -74,6 +76,27 @@ export class CryptoCheckout extends LitElement {
       margin: .25em 0 2em;
       opacity: 0.6;
     }
+
+    .cc-search {
+      position: relative;
+    }
+
+    .cc-search-icon {
+      position: absolute;
+      top: .5em;
+      left: .5em;
+    }
+
+    .cc-search > input {
+      border-top-left-radius: 1em;
+      border-top-right-radius: 1em;
+      border: .1em solid #ccc;
+      font-size: inherit;
+      font-family: inherit;
+      padding: .5em 3.5em;
+      box-sizing: border-box;
+      width: 100%;
+    }    
     
     .cc-coin {
       font-size: inherit;
@@ -85,13 +108,12 @@ export class CryptoCheckout extends LitElement {
       border-right: .1em solid #ccc;
       border-bottom: none;
       border-left: .1em solid #ccc;
-      padding: 1.5em 4em 1.5em 1.5em;
+      padding: .5em;
       cursor: pointer;
     }
 
     .cc-coin:first-of-type {
-      border-top-left-radius: 1em;
-      border-top-right-radius: 1em;
+      border-top: none;
     }
     
     .cc-coin:last-of-type {
@@ -177,6 +199,7 @@ export class CryptoCheckout extends LitElement {
   @property({type: Boolean}) target = false;
   @property({type: Boolean}) closeOnEscape = true;
   @property({type: Boolean}) lockCoin = false;
+  @property({type: Boolean}) showSearch = true;
 
   @property() message = '';
   @property() hasTime = true;
@@ -237,6 +260,14 @@ export class CryptoCheckout extends LitElement {
     return html`
       <h1 class="cc-title">${this.translation('CURRENCY')}</h1>
       <p class="cc-description">${this.translation('SELECT_CURRENCY')}</p>
+      ${this.showSearch ? html`<div class="cc-search">
+        <div class="cc-search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 24 24" width="32px" fill="#000000">
+            <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </div>
+        <input name="paf" placeholder="${this.translation('SEARCH')}" />
+      </div>` : ''}
       <div class="cc-coins">
         ${this.coins.map(coin => coinTemp(coin))}
       </div>
