@@ -18,6 +18,8 @@ export * from './coins/xmr';
 export * from './coins/doge';
 export * from './coins/usdt';
 export * from './coins/bnb';
+export * from './coins/sol';
+export * from './coins/xrp';
 
 /**
  * Services
