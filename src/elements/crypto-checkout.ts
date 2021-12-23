@@ -133,6 +133,15 @@ export class CryptoCheckout extends LitElement {
       margin-right: 1em;
     }
     
+    .cc-loading-wrapper {
+      margin: 1em 0;
+    }
+    
+    .cc-loading-label {
+      margin-top: 1em;
+      text-align:center;
+    }
+    
     #cc-qr {
       text-align: center;
       margin: 1.5em 0;
@@ -204,6 +213,7 @@ export class CryptoCheckout extends LitElement {
   @property() message = '';
   @property() hasTime = true;
   @property() loading = false;
+  @property() priceLoading = false;
 
   @property() paid = false;
   @property() error: string;
@@ -314,22 +324,29 @@ export class CryptoCheckout extends LitElement {
         <h1 class="cc-title">${this.coin.label}</h1>
         <p class="cc-description">${this.translation('TIME_LEFT')}: <crypto-timer time="15:00" @finished="${this.timeOut}"></crypto-timer></p>
         <slot name="instructions"></slot>
-        <div id="cc-qr"></div>
-        <figure class="cc-figure">
-          <figcaption class="cc-figure-title">${this.translation('AMOUNT_TO_PAY')}:</figcaption>
-          <div class="cc-figure-content">${this.displayedCoinValue}</div>
-        </figure>
-        <figure class="cc-figure">
-          <figcaption class="cc-figure-title">${this.translation('WALLET_ADDRESS')}:</figcaption>
-          <div class="cc-figure-content">${this.coin.wallet}</div>
-        </figure>
+        ${this.priceLoading ? html`
+          <div class="cc-loading-wrapper">
+            <div class="cc-loading"></div>
+            <div class="cc-loading-label">${this.translation('PRICE_LOADING')}</div>
+          </div>
+        ` : html`
+          <div id="cc-qr"></div>
+          <figure class="cc-figure">
+            <figcaption class="cc-figure-title">${this.translation('AMOUNT_TO_PAY')}:</figcaption>
+            <div class="cc-figure-content">${this.displayedCoinValue}</div>
+          </figure>
+          <figure class="cc-figure">
+            <figcaption class="cc-figure-title">${this.translation('WALLET_ADDRESS')}:</figcaption>
+            <div class="cc-figure-content">${this.coin.wallet}</div>
+          </figure>
         
-        ${this.coin.paymentMethods?.length ? this.paymentMethodsTemp() : ''}
+          ${this.coin.paymentMethods?.length ? this.paymentMethodsTemp() : ''}
         
-        <div class="cc-actions">
-          ${this.lockCoin ? '' : html`<button class="cc-button" @click="${() => this.selectCoin('')}">${this.translation('BACK')}</button>`}
-          <button class="cc-button" @click="${() => this.confirmPay()}">${this.translation('CONFIRM')}</button>
-        </div>
+          <div class="cc-actions">
+            ${this.lockCoin ? '' : html`<button class="cc-button" @click="${() => this.selectCoin('')}">${this.translation('BACK')}</button>`}
+            <button class="cc-button" @click="${() => this.confirmPay()}">${this.translation('CONFIRM')}</button>
+          </div>
+        `}
       `;
     }
 
@@ -396,10 +413,14 @@ export class CryptoCheckout extends LitElement {
     this.coin = coin ? this.coins.find(it => it.id === coin) : null;
 
     if (this.coin) {
+
+      this.priceLoading = true;
+
       this.shownCoins = [...this.coins];
       this.coinValue = await this.coin.rate(this.value);
       this.displayedCoinValue = this.coin.format(this.coinValue);
 
+      this.priceLoading = false;
       this.hasTime = true;
 
       await this.updateComplete;

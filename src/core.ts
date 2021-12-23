@@ -38,6 +38,7 @@ export function init(
       'ERROR': 'Error',
       'TIME_LEFT': 'Time left to finish payment',
       'AMOUNT_TO_PAY': 'Amount to pay',
+      'PRICE_LOADING': 'Price loading...',
       'WALLET_ADDRESS': 'Payment address',
       'BACK': 'Back',
       'CONFIRM': 'Confirm Payment',
