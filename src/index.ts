@@ -20,6 +20,7 @@ export * from './coins/usdt';
 export * from './coins/bnb';
 export * from './coins/sol';
 export * from './coins/xrp';
+export * from './coins/matic';
 
 /**
  * Services
