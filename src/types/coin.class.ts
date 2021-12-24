@@ -1,18 +1,23 @@
 import {PaymentMethod} from './payment-method.class';
 
 export class Coin {
+
+	label: string;
+
 	constructor(
 		public id: string,
 		public wallet: string,
-		public label: string,
+		public name: string,
 		public icon: string,
 		public color: string,
 		public paymentMethods?: PaymentMethod[]
-	) {}
+	) {
+		this.label = name;
+	}
 
 	qr(amount: number, note?: string) {
 
-		let data = `${this.label.toLowerCase().replace(/ /g, '')}:${this.wallet}?amount=${amount}`;
+		let data = `${this.name.toLowerCase().replace(/ /g, '')}:${this.wallet}?amount=${amount}`;
 
 		if (note) {
 			data += `&data=${data}`;
@@ -24,7 +29,7 @@ export class Coin {
 	rate(amount: number) {
 		return window.jpCrypto.service.getPrice(
 			amount,
-			this.label
+			this.name
 				.replace(/ /g, '-')
 				.toLowerCase()
 		)
