@@ -83,6 +83,10 @@ export function init(
 
 			(config.target || document.body).appendChild(el);
 
+			if (window.jpCrypto.onOpen) {
+				window.jpCrypto.onOpen();
+			}
+
 			return el;
 		},
     close: () => {
@@ -93,6 +97,10 @@ export function init(
       }
 
 		  el.parentNode.removeChild(el);
+
+			if (window.jpCrypto.onClose) {
+				window.jpCrypto.onClose();
+			}
     }
 	};
 

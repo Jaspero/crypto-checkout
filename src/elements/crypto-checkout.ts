@@ -470,7 +470,7 @@ export class CryptoCheckout extends LitElement {
   }
 
   close() {
-    this.parentNode.removeChild(this);
+    window.jpCrypto.close();
   }
 
   async confirmPay() {

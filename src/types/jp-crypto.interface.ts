@@ -21,4 +21,6 @@ export interface JpCrypto {
 	open: (config: JpCryptoConfig) => CryptoCheckout;
 	close: () => void;
 	instance?: HTMLElement;
+	onOpen?: () => void;
+	onClose?: () => void;
 }
