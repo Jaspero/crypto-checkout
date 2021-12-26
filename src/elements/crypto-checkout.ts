@@ -329,6 +329,12 @@ export class CryptoCheckout extends LitElement {
             <div class="cc-loading"></div>
             <div class="cc-loading-label">${this.translation('PRICE_LOADING')}</div>
           </div>
+
+          ${this.lockCoin ? '' : html`
+            <div class="cc-actions">
+              <button class="cc-button" @click="${() => this.selectCoin('')}">${this.translation('BACK')}</button>
+            </div>
+          `}
         ` : html`
           <div id="cc-qr"></div>
           <figure class="cc-figure">
