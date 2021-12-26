@@ -169,6 +169,15 @@ export class CryptoCheckout extends LitElement {
       background: #eee;
     }
 
+    .cc-method {
+      display: flex;
+      align-items: center;
+    }
+
+    .cc-method > span {
+      margin-left: 0.5em;
+    }
+
     .cc-figure {
       margin: 1em 0;
     }
@@ -302,9 +311,9 @@ export class CryptoCheckout extends LitElement {
   paymentMethodsTemp() {
 
     const methodTemp = (c) =>
-      html`<button class="cc-method" data-id="${c.id}" @click="${this.paymentMethodSelected}">
+      html`<button class="cc-method cc-button" data-id="${c.id}" @click="${this.paymentMethodSelected}">
         ${unsafeHTML(c.icon)}
-        ${c.label}
+        <span>${c.label}</span>
       </button>`;
 
     return html`<div class="cc-methods">${this.coin.paymentMethods.filter(method => method.available()).map(method => methodTemp(method))}</div>`;
