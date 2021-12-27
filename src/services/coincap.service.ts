@@ -11,11 +11,16 @@ export class CoincapService extends CryptoService {
     }
   } = {};
 
-  async getPrice(value, coin) {
+  roundAccurately(number: number, decimalPlaces: number) {
+    // @ts-ignore
+    return Number(Math.round(number + 'e' + decimalPlaces) + 'e-' + decimalPlaces);
+  }
+
+  async getPrice(value, coin, decimals = 6) {
 
     if (this.cache[coin]) {
       if (this.cache[coin].timeStamp > (Date.now() - this.cacheDuration)) {
-        return value / this.cache[coin].price;
+        return this.roundAccurately(value / this.cache[coin].price, decimals);
       } else {
         delete this.cache[coin];
       }
@@ -31,7 +36,7 @@ export class CoincapService extends CryptoService {
       price: res.data.priceUsd
     };
 
-    return value / res.data.priceUsd;
+    return this.roundAccurately(value / res.data.priceUsd, decimals);
   }
 
   async confirmPayment(value, note) {

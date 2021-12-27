@@ -3,6 +3,7 @@ import {PaymentMethod} from './payment-method.class';
 export class Coin {
 
 	label: string;
+	decimals = 6;
 
 	constructor(
 		public id: string,
@@ -31,7 +32,8 @@ export class Coin {
 			amount,
 			this.name
 				.replace(/ /g, '-')
-				.toLowerCase()
+				.toLowerCase(),
+			this.decimals
 		)
 	}
 
