@@ -1,19 +1,7 @@
 import {metaMask} from '../payment-methods/meta-mask';
 import {Coin} from '../types/coin.class';
 
-class Eth extends Coin {
-	qr(amount, note?) {
-		let data = `ethereum:${this.wallet}?amount=${amount}`;
-
-		if (note) {
-			data += `&data=${note}`;
-		}
-
-		return data;
-	}
-}
-
-export const eth = new Eth(
+export const eth = new Coin(
 	'ETH',
 	'',
 	'Ethereum',
