@@ -20,7 +20,7 @@ export class Coin {
 		let data = `${this.name.toLowerCase().replace(/ /g, '')}:${this.wallet}?amount=${amount}`;
 
 		if (note) {
-			data += `&data=${data}`;
+			data += `&data=${note}`;
 		}
 
 		return data;
