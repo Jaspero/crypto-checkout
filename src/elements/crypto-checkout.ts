@@ -304,8 +304,6 @@ export class CryptoCheckout extends LitElement {
     } else {
       this.shownCoins = [...this.coins];
     }
-
-    console.log(value, this.shownCoins);
   }
 
   paymentMethodsTemp() {
