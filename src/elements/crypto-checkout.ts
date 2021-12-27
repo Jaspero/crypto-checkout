@@ -33,6 +33,7 @@ export class CryptoCheckout extends LitElement {
       border-radius: 1.5em;
       padding: 3em;
       box-shadow: 0 0 .1em rgba(0,0,0,.2), 0 .5em 1em rgba(0,0,0,.1), 0 1em 2em rgba(0,0,0,.05);
+      position: relative;
     }
 
     .cc-close {
@@ -168,6 +169,20 @@ export class CryptoCheckout extends LitElement {
     .cc-button:focus {
       background: #eee;
     }
+    
+    .cc-notification {
+      position: absolute;
+      bottom: -3.5em;
+      text-align: center;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgb(33, 33, 33);
+      color: white;
+      padding: 0.5em;
+      box-shadow: rgb(0 0 0 / 25%) 0px 0.1em 0.25em;
+      border-radius: 0.5em;
+      min-width: 20em;
+    }
 
     .cc-method {
       display: flex;
@@ -233,6 +248,7 @@ export class CryptoCheckout extends LitElement {
   @property() displayedCoinValue: string;
 
   @property() coin: Coin;
+  @property() notification: string;
 
   @query('#cc-qr')
   _qrEl: HTMLDivElement;
@@ -350,7 +366,7 @@ export class CryptoCheckout extends LitElement {
           </figure>
           <figure class="cc-figure">
             <figcaption class="cc-figure-title">${this.translation('WALLET_ADDRESS')}:</figcaption>
-            <div class="cc-figure-content">${this.coin.wallet}</div>
+            <div class="cc-figure-content" @click="${event => this.selectWallet(event)}">${this.coin.wallet}</div>
           </figure>
         
           ${this.coin.paymentMethods?.length ? this.paymentMethodsTemp() : ''}
@@ -359,6 +375,12 @@ export class CryptoCheckout extends LitElement {
             ${this.lockCoin ? '' : html`<button class="cc-button" @click="${() => this.selectCoin('')}">${this.translation('BACK')}</button>`}
             <button class="cc-button" @click="${() => this.confirmPay()}">${this.translation('CONFIRM')}</button>
           </div>
+          
+          ${this.notification ?
+            html`<div class="cc-notification">
+              ${this.notification}  
+            </div>` : ''
+          }
         `}
       `;
     }
@@ -405,6 +427,25 @@ export class CryptoCheckout extends LitElement {
         </article>
       </div>
     `;
+  }
+
+  selectWallet(event: PointerEvent) {
+    const target = event.target as HTMLDivElement;
+    const sel = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(target);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    navigator.clipboard.writeText(target.innerText)
+      .then(() => this.notify('Address Copied To Clipboard'))
+      .catch(console.error);
+  }
+
+  notify(text: string, duration = 2000) {
+    this.notification = text;
+    setTimeout(() => {
+      this.notification = '';
+    }, duration)
   }
 
   async coinSelected(event: PointerEvent) {
